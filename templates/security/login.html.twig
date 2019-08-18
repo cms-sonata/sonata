@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <main role="main" class="container">
+        <br><br><br><br><br>
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <form class="form-signin" action="{{ path('security_login') }}" method="post">
+                    <h1 class="h3 mb-3 font-weight-normal">Авторизация</h1>
+                    <hr >
+
+                    {% if error %}
+                        <div class="alert alert-danger" style="border-radius: 0px;">
+                            {{ error.messageKey }}
+                        </div>
+                    {% endif %}
+
+                    <label for="login" class="sr-only">Логин</label>
+                    <input style="border-radius: 0px; border-bottom: 0px"  type="text" name="login" id="login" class="form-control" placeholder="Логин" required="" autofocus="">
+                    <label for="inputPassword" class="sr-only">Пароль</label>
+                    <input style="border-radius: 0px" type="password" name="password" id="password" class="form-control" placeholder="Пароль" required="">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                    <button style="border-radius: 0px; border: 0px; border-bottom: solid 1px #ced4da;" class="btn btn-sm btn-outline-secondary btn-block" type="submit">Войти</button>
+                    <br >
+                    <a href="{{ path('security_registration') }}">Регистрация</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

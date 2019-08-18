@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <main role="main" class="container">
+        <br><br><br><br><br>
+        <div class="row justify-content-center">
+            <div class="col-4">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button style="border-radius: 0px; border: 0px; border-bottom: solid 1px #ced4da;" type="submit" class="btn btn-sm btn-outline-secondary btn-block">
+                    <i class="fa fa-save" aria-hidden="true"></i> Сохранить
+                </button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
