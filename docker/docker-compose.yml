@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  php-app:
+    build: php
+    restart: always
+    expose:
+      - ${APP_PORT}
+    depends_on:
+      - mysql
+    volumes:
+      - ${APP_PATH}:${DOCUMENT_ROOT}
+    command: php-fpm7.2
+  nginx:
+    build: nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - php-app
+    volumes:
+      - ${APP_PATH}public/statics:${DOCUMENT_ROOT}/public/statics
+      - ${APP_PATH}docker/nginx/conf.d:/etc/nginx/conf.d
+  mysql:
+    build: mysql
+    restart: always
+    volumes:
+      - ${APP_PATH}var/lib/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    command: ['mysqld']
