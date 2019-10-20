@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  */
 class News
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -33,16 +38,20 @@ class News
     private $publishedAt;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="string", length=100, unique=true)
+     * @Gedmo\Slug(fields={"title"})
      */
-    private $createdAt;
+    private $slug;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="news")
      */
-    private $updatedAt;
+    private $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,26 +94,40 @@ class News
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getSlug(): ?string
     {
-        return $this->createdAt;
+        return $this->slug;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setSlug(string $slug): self
     {
-        $this->createdAt = $createdAt;
+        $this->slug = $slug;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
     {
-        return $this->updatedAt;
+        return $this->tags;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function addTag(Tag $tag): self
     {
-        $this->updatedAt = $updatedAt;
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
 
         return $this;
     }

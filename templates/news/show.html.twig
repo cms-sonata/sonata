@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello NewsController!{% endblock %}
+
+{% block body %}
+    <main role="main" class="container">
+        <div class="news-post">
+            <h2 class="news-post-title">{{ news_post.title }}</h2>
+            <p class="news-post-meta">
+                {{ news_post.publishedAt|ago }}
+                <span class="pl-2">
+                    {% for tag in news_post.tags %}
+                        <span class="badge badge-secondary">{{ tag.name }}</span>
+                    {% endfor %}
+                </span>
+            </p>
+            <p class="news-post-content">{{ news_post.content|markdown }}</p>
+        </div>
+    </main>
+{% endblock %}

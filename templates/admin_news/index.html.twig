@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminNewsController!{% endblock %}
+
+{% block body %}
+
+    <main role="main" class="container">
+        <div class="table-responsive">
+            <h1>Новости ({{ pagination.getTotalItemCount }})</h1>
+            <form>
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." >
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Published</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for news in pagination  %}
+                    <tr>
+                        <td><a href="{{ path('news_show', {"slug": news.slug}) }}">{{ news.title }}</a></td>
+                        <td>{{ news.content|truncate}}</td>
+                        <td>{{ news.publishedAt|date("d.m.Y")}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No news found
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </main>
+
+{% endblock %}

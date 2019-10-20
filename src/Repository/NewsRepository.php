@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\News;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,22 +20,29 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
-    // /**
-    //  * @return News[] Returns an array of News objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getPublishedQueryBuilder()
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+            ->leftJoin('n.tags', 't')
+            ->addSelect('t')
+            ->andWhere('n.publishedAt IS NOT NULL')
+            ->orderBy('n.publishedAt', 'DESC')
         ;
     }
-    */
+
+    public function getWithSearchQueryBuilder($searchPhrase): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('n');
+
+        if ($searchPhrase) {
+            $qb
+                ->andWhere('n.title LIKE :searchPhrase')
+                ->setParameter('searchPhrase', '%'.$searchPhrase.'%')
+            ;
+        }
+
+        return $qb->orderBy('n.createdAt', 'DESC');
+    }
 
     /*
     public function findOneBySomeField($value): ?News

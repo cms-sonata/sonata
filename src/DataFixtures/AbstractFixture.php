@@ -16,6 +16,9 @@ abstract class AbstractFixture extends Fixture
     /** @var Generator */
     protected $faker;
 
+    /** @var array  */
+    private $referencesIndex = [];
+
     abstract protected function loadData(ObjectManager $manager);
 
     public function load(ObjectManager $manager)
@@ -38,4 +41,28 @@ abstract class AbstractFixture extends Fixture
         }
     }
 
+    protected function getRandomReference(string $groupName) {
+        if (!isset($this->referencesIndex[$groupName])) {
+            $this->referencesIndex[$groupName] = [];
+            foreach ($this->referenceRepository->getReferences() as $key => $ref) {
+                if (strpos($key, $groupName.'_') === 0) {
+                    $this->referencesIndex[$groupName][] = $key;
+                }
+            }
+        }
+        if (empty($this->referencesIndex[$groupName])) {
+            throw new \InvalidArgumentException(sprintf('Did not find any references saved with the group name "%s"', $groupName));
+        }
+        $randomReferenceKey = $this->faker->randomElement($this->referencesIndex[$groupName]);
+        return $this->getReference($randomReferenceKey);
+    }
+
+    protected function getRandomReferences(string $className, int $count)
+    {
+        $references = [];
+        while (count($references) < $count) {
+            $references[] = $this->getRandomReference($className);
+        }
+        return $references;
+    }
 }
