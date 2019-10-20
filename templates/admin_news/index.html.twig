@@ -9,7 +9,7 @@
             <h1>Новости ({{ pagination.getTotalItemCount }})</h1>
             <form>
                 <div class="input-group mb-3">
-                    <input type="text" name="q" class="form-control" placeholder="Search..." >
+                    <input type="text" name="q" class="form-control" placeholder="Search..."  value="{{ searchPhrase }}">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-outline-secondary">
                             <i class="fa fa-search"></i>

@@ -24,6 +24,7 @@ class AdminNewsController extends AbstractController
 
         return $this->render('admin_news/index.html.twig', [
             'pagination' => $paginaton,
+            'searchPhrase' => $searchPhrase
         ]);
     }
 
