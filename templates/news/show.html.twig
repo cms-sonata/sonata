@@ -10,7 +10,7 @@
                 {{ news_post.publishedAt|ago }}
                 <span class="pl-2">
                     {% for tag in news_post.tags %}
-                        <span class="badge badge-secondary">{{ tag.name }}</span>
+                        <a class="badge badge-secondary" href="{{ path('news_tag', {"tag": tag.slug}) }}">{{ tag.name }}</a>
                     {% endfor %}
                 </span>
             </p>

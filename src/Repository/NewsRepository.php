@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\News;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -44,6 +46,16 @@ class NewsRepository extends ServiceEntityRepository
         return $qb->orderBy('n.createdAt', 'DESC');
     }
 
+    public function getTaggedQueryBuilder(string $tag)
+    {
+        return $this->createQueryBuilder('n')
+            ->innerJoin('n.tags', 't', Join::WITH, 't.slug = :tag')
+            ->leftJoin('n.tags', 't2')
+            ->addSelect('t2')
+            ->setParameter('tag', $tag)
+            ->orderBy('n.publishedAt', 'DESC')
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?News
     {

@@ -14,10 +14,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 class NewsController extends AbstractController
 {
     /**
-     * @Route("/news", defaults={"_format"="html"}, methods={"GET"}, name="news_index")
+     * @Route("/news", methods={"GET"}, name="news_index")
      * @Cache(smaxage="10")
      */
-    public function index(Request $request, string $_format, NewsRepository $newsRepo, PaginatorInterface $paginator)
+    public function index(Request $request, NewsRepository $newsRepo, PaginatorInterface $paginator)
     {
         $queryBuilder = $newsRepo->getPublishedQueryBuilder();
 
@@ -32,12 +32,30 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/news/{slug}", name="news_show")
+     * @Route("/news/{slug}", methods={"GET"}, name="news_show")
      */
     public function show(News $news)
     {
         return $this->render('news/show.html.twig', [
             'news_post' => $news
+        ]);
+    }
+
+    /**
+     * @Route("/news/tag/{tag}", methods={"GET"}, name="news_tag")
+     * @Cache(smaxage="10")
+     */
+    public function tag(string $tag, Request $request, NewsRepository $newsRepo, PaginatorInterface $paginator)
+    {
+        $queryBuilder = $newsRepo->getTaggedQueryBuilder($tag);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1)
+        );
+
+        return $this->render('news/index.html.twig', [
+            'pagination' => $pagination,
         ]);
     }
 }
