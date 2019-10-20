@@ -16,8 +16,14 @@
                             {{ news.publishedAt|ago }}
                             <span class="pl-2">
                                 {% for tag in news.tags %}
-                                    <a class="badge badge-secondary" href="{{ path('news_tag', {"tag": tag.slug}) }}">
-                                        {{ tag.name }}
+                                    <a class="badge
+                                           {% if app.request.get('tag') == tag.slug %}
+                                                badge-dark
+                                           {% else %}
+                                                badge-secondary
+                                           {% endif %}
+                                       "
+                                        href="{{ path('news_tag', {"tag": tag.slug}) }}">{{ tag.name }}
                                     </a>
                                 {% endfor %}
                             </span>
