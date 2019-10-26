@@ -2,15 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -28,9 +35,35 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/logout", name="app_logout")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function logout()
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+    }
+
+    /**
+     * @Route("/register", name="app_register")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator)
+    {
+        if($request->isMethod('POST')) {
+            $user = new User();
+
+            $user->setEmail($request->request->get('email'));
+            $user->setFirstName('Mystery');
+            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            return $guardHandler->authenticateUserAndHandleSuccess(
+                $user, $request, $authenticator, 'main'
+            );
+        }
+
+        return $this->render('security/register.html.twig', []);
     }
 }

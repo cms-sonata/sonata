@@ -6,6 +6,10 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_ADMIN_NEWS, ROLE_ALLOWED_TO_SWITCH]
+
     encoders:
         App\Entity\User:
             algorithm: auto
@@ -36,5 +40,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+#         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#         - { path: ^/account, roles: IS_AUTHENTICATED_FULLY }
+#         - { path: ^/admin/news, roles: ROLE_ADMIN_NEWS }
+#         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

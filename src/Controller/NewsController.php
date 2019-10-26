@@ -10,12 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class NewsController extends AbstractController
 {
     /**
      * @Route("/news", methods={"GET"}, name="news_index")
      * @Cache(smaxage="10")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function index(Request $request, NewsRepository $newsRepo, PaginatorInterface $paginator)
     {
@@ -33,6 +35,7 @@ class NewsController extends AbstractController
 
     /**
      * @Route("/news/{slug}", methods={"GET"}, name="news_show")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function show(News $news)
     {
@@ -44,6 +47,7 @@ class NewsController extends AbstractController
     /**
      * @Route("/news/tag/{tag}", methods={"GET"}, name="news_tag")
      * @Cache(smaxage="10")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function tag(string $tag, Request $request, NewsRepository $newsRepo, PaginatorInterface $paginator)
     {

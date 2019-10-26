@@ -19,6 +19,7 @@ class NewsFixtures extends AbstractFixture implements DependentFixtureInterface
                 ->setContent($this->faker->text(400))
             ;
 
+            $news->setAuthor($this->getRandomReference('main_users'));
             if ($this->faker->boolean(70)) {
                 $news->setPublishedAt($this->faker->dateTimeBetween('-100 days', 'today'));
             }
@@ -44,6 +45,7 @@ class NewsFixtures extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
+            UserFixture::class,
             TagFixture::class
         ];
     }
