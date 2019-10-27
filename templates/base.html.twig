@@ -45,11 +45,11 @@
                                 <i class="fas fa-user"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="{{ path('account') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ path('account') }}">Профиль</a>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a class="dropdown-item" href="{{ path('admin_news_create') }}">Create news</a>
+                                    <a class="dropdown-item" href="{{ path('admin_news') }}">Управление</a>
                                 {% endif %}
-                                <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">Выход</a>
                             </div>
                         </li>
                     {% else %}
