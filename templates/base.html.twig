@@ -47,7 +47,7 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{{ path('account') }}">Profile</a>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a class="dropdown-item" href="{{ path('admin_news') }}">Create news</a>
+                                    <a class="dropdown-item" href="{{ path('admin_news_create') }}">Create news</a>
                                 {% endif %}
                                 <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
                             </div>
