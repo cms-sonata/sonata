@@ -47,7 +47,6 @@ class AdminNewsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var News $news */
             $news = $form->getData();
-            $news->setAuthor($this->getUser());
 
             $entityManager->persist($news);
             $entityManager->flush();
@@ -60,19 +59,30 @@ class AdminNewsController extends AbstractController
         return $this->render('admin_news/create.html.twig', [
             'news_form' => $form->createView()
         ]);
-
     }
-
 
     /**
-     * @Route("/admin/news/{id}/edit")
+     * @Route("/admin/news/{id}/edit", name="admin_news_edit")
      * @IsGranted("NEWS_EDIT", subject="news")
      */
-    public function edit(News $news)
+    public function edit(News $news, Request $request, EntityManagerInterface $entityManager)
     {
-        dd($news);
+        $form = $this->createForm(NewsFormType::class, $news);
 
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist($news);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'News updated!');
+
+            return $this->redirectToRoute('admin_news_edit', ['id' => $news->getId()]);
+        }
+
+        return $this->render('admin_news/edit.html.twig', [
+            'news_form' => $form->createView()
+        ]);
     }
-
 }

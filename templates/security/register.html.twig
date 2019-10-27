@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme registration_form _self %}
+
 {% block title %}Register{% endblock %}
 
 {% block stylesheets %}
@@ -8,23 +10,63 @@
     <link rel="stylesheet" href="{{ asset('statics/css/login.css') }}">
 {% endblock %}
 
+{% block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {label_attr: {class: 'sr-only'}}) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+
+{%- endblock form_row %}
+
+{% block _user_registration_form_agree_terms_row %}
+    <div class="checkbox mb-3">
+        {{ form_errors(form) }}
+        <label>
+            <input type="checkbox"
+                   name="{{ full_name }}"
+                    {% if required %}
+                        required="required"
+                    {% endif %}
+            > {{ label}}
+        </label>
+    </div>
+{% endblock %}
+
 {% block body %}
 
-    <form class="form-signin" method="post">
+    {{ form_start(registration_form, {
+        attr: {class: 'form-signin'}
+    }) }}
 
         <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_terms"> I agree terms I for sure read
-            </label>
-        </div>
 
-        <button class="btn btn-lg btn-dark btn-block" type="submit">
-            Register
-        </button>
-    </form>
+        {{ form_row(registration_form.email, {attr: {placeholder: 'Email'}}) }}
+        {{ form_row(registration_form.plain_password, {attr: {placeholder: 'Пароль'}}) }}
+        {{ form_row(registration_form.agree_terms) }}
+
+        <button class="btn btn-lg btn-dark btn-block" type="submit">Зарегистрироваться</button>
+    {{ form_end(registration_form) }}
+
+{#    <form class="form-signin" method="post">#}
+
+{#        <h1 class="h3 mb-3 font-weight-normal">Register</h1>#}
+{#        <label for="inputEmail" class="sr-only">Email address</label>#}
+{#        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>#}
+{#        <label for="inputPassword" class="sr-only">Password</label>#}
+{#        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>#}
+{#        <div class="checkbox mb-3">#}
+{#            <label>#}
+{#                <input type="checkbox" name="_terms"> I agree terms I for sure read#}
+{#            </label>#}
+{#        </div>#}
+
+{#    </form>#}
 {% endblock %}

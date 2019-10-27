@@ -25,6 +25,7 @@ class UserFixture extends AbstractFixture
 
             $user->setFirstName($this->faker->firstName);
             $user->setPassword($this->passwordEncoder->encodePassword($user,'password'));
+            $user->agreeTerms();
 
             return $user;
         });
@@ -37,6 +38,7 @@ class UserFixture extends AbstractFixture
 
             $user->setFirstName($this->faker->firstName);
             $user->setPassword($this->passwordEncoder->encodePassword($user,'password'));
+            $user->agreeTerms();
 
             return $user;
         });

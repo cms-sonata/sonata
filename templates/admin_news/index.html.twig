@@ -26,9 +26,10 @@
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Content</th>
-                    <th scope="col">Published</th>
+                    <th scope="col">Заголовок</th>
+                    <th scope="col">Текст новости</th>
+                    <th scope="col">Опубликовано</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,11 @@
                         <td>{{ news.content|truncate}}</td>
                         <td>
                             <span class="fa fa-{{ news.isPublished ? 'check' : 'times' }}"></span>
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_news_edit', {id: news.id}) }}">
+                                <i class="fa fa-pencil-alt"></i>
+                            </a>
                         </td>
                     </tr>
                 {% else %}
