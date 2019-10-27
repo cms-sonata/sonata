@@ -14,9 +14,9 @@
     </head>
     <body>
 
-    <header>
-        <!-- Fixed navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <!-- Fixed navbar -->
+    <div class="fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="/">Sonata</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,9 +63,20 @@
                 </ul>
             </div>
         </nav>
-    </header>
 
-    {% block body %}{% endblock %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <main role="main" class="container mt-5">
+        {% block body %}{% endblock %}
+    </main>
     {% block footer %}
         <footer class="footer">
             <div class="container">

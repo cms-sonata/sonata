@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Form\NewsFormType;
 use App\Repository\NewsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +32,37 @@ class AdminNewsController extends AbstractController
             'searchPhrase' => $searchPhrase
         ]);
     }
+
+
+    /**
+     * @Route("/admin/news/create", name="admin_news_create")
+     * @IsGranted("ROLE_ADMIN_NEWS")
+     */
+    public function create(EntityManagerInterface $entityManager, Request $request)
+    {
+        $form = $this->createForm(NewsFormType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var News $news */
+            $news = $form->getData();
+            $news->setAuthor($this->getUser());
+
+            $entityManager->persist($news);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'News created!');
+
+            return $this->redirectToRoute('admin_news');
+        }
+
+        return $this->render('admin_news/create.html.twig', [
+            'news_form' => $form->createView()
+        ]);
+
+    }
+
 
     /**
      * @Route("/admin/news/{id}/edit")

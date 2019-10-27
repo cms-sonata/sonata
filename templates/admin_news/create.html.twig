@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminNewsController!{% endblock %}
+
+{% block body %}
+
+        <h1>Создание Новости </h1>
+
+        {{ form_start(news_form) }}
+            {{ form_widget(news_form) }}
+
+            <button type="submit" class="btn btn-secondary">Create</button>
+        {{ form_end(news_form) }}
+
+{% endblock %}

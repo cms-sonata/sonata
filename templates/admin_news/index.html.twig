@@ -3,10 +3,15 @@
 {% block title %}Hello AdminNewsController!{% endblock %}
 
 {% block body %}
-
-    <main role="main" class="container">
         <div class="table-responsive">
-            <h1>Новости ({{ pagination.getTotalItemCount }})</h1>
+
+            <div class="">
+                <h1 class="d-inline-block align-middle">Новости ({{ pagination.getTotalItemCount }})</h1>
+                <a href="{{ path('admin_news_create') }}" class="btn btn-secondary align-middle">
+                    Create <span class="fa fa-plus-circle"></span>
+                </a>
+            </div>
+
             <form>
                 <div class="input-group mb-3">
                     <input type="text" name="q" class="form-control" placeholder="Search..."  value="{{ searchPhrase }}">
@@ -31,7 +36,9 @@
                     <tr>
                         <td><a href="{{ path('news_show', {"slug": news.slug}) }}">{{ news.title }}</a></td>
                         <td>{{ news.content|truncate}}</td>
-                        <td>{{ news.publishedAt|date("d.m.Y")}}</td>
+                        <td>
+                            <span class="fa fa-{{ news.isPublished ? 'check' : 'times' }}"></span>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
@@ -45,6 +52,5 @@
 
             {{ knp_pagination_render(pagination) }}
         </div>
-    </main>
 
 {% endblock %}
