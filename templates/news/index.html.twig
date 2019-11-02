@@ -1,20 +1,37 @@
+{% trans_default_domain 'news' %}
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NewsController!{% endblock %}
+{% block title %}{% trans %}News{% endtrans %}{% endblock %}
 
 {% block body %}
-
-    <main role="main" class="container">
-        <h1 class="mt-5">Новости sonata</h1>
+        <h1>{% trans %}News{% endtrans %}</h1>
         <hr>
         <div class="row">
             <div class="col-lg-12">
-                {% for new in news %}
-                    <h4><a href="#">{{ new.title }}</a></h4>
-                    <p>{{ new.content}}</p>
+                {% for news in pagination %}
+                    <div class="border-bottom">
+                        <h4><a href="{{ path('news_show', {"slug": news.slug}) }}">{{ news.title }}</a></h4>
+                        <p class="news-post-met">
+                            {{ news.publishedAt|ago }}
+                            <span class="pl-2">
+                                {% for tag in news.tags %}
+                                    <a class="badge
+                                           {% if app.request.get('tag') == tag.slug %}
+                                                badge-dark
+                                           {% else %}
+                                                badge-secondary
+                                           {% endif %}
+                                       "
+                                        href="{{ path('news_tag', {"tag": tag.slug}) }}">{{ tag.name }}
+                                    </a>
+                                {% endfor %}
+                            </span>
+                        </p>
+                        <p>{{ news.content}}</p>
+                    </div>
                 {% endfor %}
             </div>
+            {{ knp_pagination_render(pagination) }}
         </div>
-    </main>
 
 {% endblock %}

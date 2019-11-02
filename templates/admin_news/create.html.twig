@@ -1,0 +1,13 @@
+{% trans_default_domain 'news' %}
+{% extends 'admin_news/manage.html.twig' %}
+
+{% block title %}{% trans %}Manage news{% endtrans %}{% endblock %}
+
+{% block body %}
+        <h1>{% trans %}Create news{% endtrans %}</h1>
+        <hr>
+        {{ include('admin_news/_form.html.twig', {
+            button_text: 'Create' |trans({}, 'main')
+        })}}
+
+{% endblock %}

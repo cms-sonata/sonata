@@ -1,0 +1,19 @@
+{% trans_default_domain 'news' %}
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}News{% endtrans %}{% endblock %}
+
+{% block body %}
+        <div class="news-post">
+            <h2 class="news-post-title">{{ news_post.title }}</h2>
+            <p class="news-post-meta">
+                {{ news_post.publishedAt|ago }}
+                <span class="pl-2">
+                    {% for tag in news_post.tags %}
+                        <a class="badge badge-secondary" href="{{ path('news_tag', {"tag": tag.slug}) }}">{{ tag.name }}</a>
+                    {% endfor %}
+                </span>
+            </p>
+            <p class="news-post-content">{{ news_post.content|markdown }}</p>
+        </div>
+{% endblock %}

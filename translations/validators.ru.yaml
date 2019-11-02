@@ -1,0 +1,8 @@
+"Enter your: email": "Заполните поле: email"
+"Incorrect email": "Некорректный email"
+"Duplicate email": "Пользователь с таким email-ом уже зарегистрирован"
+"Enter your: password": "Заполните поле: пароль"
+"Not enough password length": "Паролье должен содержать больше {{ limit }} или больше символов"
+"Need agree terms": "Необходимо принять пользовательское соглашение"
+"Field cant be empty": "Поле не может быть пустым"
+"User not found": "Пользователь не найден"

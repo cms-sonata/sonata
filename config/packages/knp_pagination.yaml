@@ -1,0 +1,4 @@
+knp_paginator:
+  template:
+    pagination: 'pagination.html.twig'
+

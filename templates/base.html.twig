@@ -1,56 +1,97 @@
 <!DOCTYPE html>
 <html>
+    {% trans_default_domain 'main' %}
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>{% block title %}Welcome to sonata project!{% endblock %}</title>
+        <title>{% block title %}{% trans %}Welcome to Sonata project!{% endtrans %}{% endblock %}</title>
         {% block stylesheets %}
-            <link href="{{ asset('statics/css/bootstrap.css') }}" type="text/css" rel="stylesheet" />
-        {% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset('statics/js/bootstrap.min.js') }}"></script>
+            <link href="{{ asset('statics/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('statics/css/sticky-footer-navbar.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('statics/css/all.min.css') }}" type="text/css" rel="stylesheet" />
         {% endblock %}
     </head>
     <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <a class="navbar-brand" href="/">Sonata</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+
+    <!-- Fixed navbar -->
+    <div class="fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">{% trans %}Sonata{% endtrans %}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {{ app.request.get('_route') == 'index' ? 'active' }}">
+                        <a class="nav-link" href="{{ path('index') }}">{% trans %}About us{% endtrans %}</a>
+                    </li>
+                    <li class="nav-item {{ app.request.get('_route') == 'news_index' ? 'active' }}">
+                        <a class="nav-link" href="{{ path('news_index') }}">{% trans %}News{% endtrans %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{% trans %}Community{% endtrans %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{% trans %}Docs{% endtrans %}</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{{ path('account') }}">{% trans %}Profile{% endtrans %}</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a class="dropdown-item" href="{{ path('admin_news') }}">{% trans %}Manage{% endtrans %}</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">{% trans %}Logout{% endtrans %}</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">{% trans %}Login{% endtrans %}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">{% trans %}Register{% endtrans %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message|trans }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item {{ app.request.get('_route') == 'index' ? 'active' }}">
-                            <a class="nav-link" href="{{ path('index') }}">О нас</a>
-                        </li>
-                        <li class="nav-item {{ app.request.get('_route') == 'news_index' ? 'active' }}">
-                            <a class="nav-link" href="{{ path('news_index') }}">Новости</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Сообщество</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Документация</a>
-                        </li>
-                    </ul>
-                    {#<form class="form-inline mt-2 mt-md-0">#}
-                        {#<input class="form-control mr-sm-2" type="text" placeholder="Найти" aria-label="Search">#}
-                        {#<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>#}
-                    {#</form>#}
-                </div>
-            </nav>
-        </header>
-        <br >
+            </div>
+        {% endfor %}
+    </div>
+
+    <main role="main" class="container mt-5">
         {% block body %}{% endblock %}
-        {% block footer %}
-            <footer class="footer">
-                <div class="container">
-                    <span class="text-muted">Copirate: {{ "now"|date("Y") }} </span>
-                </div>
-            </footer>
-        {% endblock %}
+    </main>
+    {% block footer %}
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted">{% trans %}Copyright{% endtrans %}: {{ "now"|date("Y") }} </span>
+            </div>
+        </footer>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('statics/js/jquery-3.4.1.min.js') }}"></script>
+        <script src="{{ asset('statics/js/popper.min.js') }}"></script>
+        <script src="{{ asset('statics/js/bootstrap.min.js') }}"></script>
+        <script>
+            $('.dropdown-toggle').dropdown();
+        </script>
+    {% endblock %}
     </body>
 </html>
