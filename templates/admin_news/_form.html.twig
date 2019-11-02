@@ -1,6 +1,11 @@
 
 {{ form_start(news_form) }}
-            {{ form_widget(news_form) }}
+    {{ form_row(news_form.title)}}
+    {{ form_row(news_form.content)}}
+    {% if news_form.publishedAt is defined %}
+        {{ form_row(news_form.publishedAt) }}
+    {% endif %}
+{{ form_row(news_form.author)}}
 
 <button type="submit" class="btn btn-secondary">{{ button_text }}</button>
 {{ form_end(news_form) }}

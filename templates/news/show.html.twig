@@ -1,6 +1,7 @@
+{% trans_default_domain 'news' %}
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NewsController!{% endblock %}
+{% block title %}{% trans %}News{% endtrans %}{% endblock %}
 
 {% block body %}
         <div class="news-post">

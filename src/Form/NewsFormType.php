@@ -3,9 +3,6 @@
 namespace App\Form;
 
 use App\Entity\News;
-use App\Entity\User;
-use App\Repository\UserRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,41 +13,59 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class NewsFormType extends AbstractType
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $news = $options['data'] ?? null;
+
         $builder
-            ->add('title', TextType::class, ['label' => 'Заголовок'])
-            ->add('content', TextareaType::class, ['label' => ' Текст новости'])
-            ->add('publishedAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Дата публикации'
-            ])
-            ->add('author', UserSelectTextType::class, [
-                'label' => 'Автор',
-                'help' => 'Введите email',
+            ->add('title', TextType::class, [
+                'empty_data' => '',
+                'label' => 'Title',
+                'translation_domain' => 'news',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Поле не может быть пустым'
+                        'message' => 'Field cant be empty'
+                    ]),
+                ]
+            ])
+            ->add('content', TextareaType::class, [
+                'empty_data' => '',
+                'label' => 'News content',
+                'translation_domain' => 'news',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Field cant be empty'
+                    ]),
+                ]
+            ])
+            ->add('author', UserSelectTextType::class, [
+                'disabled' => $news && $news->getId(),
+                'label' => 'Author',
+                'translation_domain' => 'news',
+                'help' => 'Enter email',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Field cant be empty'
                     ]),
                 ]
             ])
         ;
+
+        if ($options['include_published_at']) {
+            $builder->add('publishedAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'label' => 'Published date',
+                'translation_domain' => 'news',
+                'required' => false
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => News::class
+            'data_class' => News::class,
+            'include_published_at' => false
         ]);
     }
 }

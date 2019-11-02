@@ -2,7 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Form\Model\UserRegistrationFormModel;
+use App\Validator\UniqueUser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -20,34 +21,37 @@ class UserRegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
+                'label' => 'Email address',
+                'translation_domain' => 'main',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Заполните поле: email'
+                        'message' => 'Enter your: email'
                     ]),
                     new Email([
-                        'message' => 'Некорректный email'
+                        'message' => 'Incorrect email'
+                    ]),
+                    new UniqueUser([
+                        'message' => 'Duplicate email'
                     ])
                 ]
             ])
             ->add('plain_password', PasswordType::class, [
-                'mapped' => false,
-                'label' => 'Пароль',
+                'translation_domain' => 'main',
+                'label' => 'Password',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Заполните поле: пароль'
+                        'message' => 'Enter your: password'
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Паролье должен содержать больше 6-и символов'
+                        'minMessage' => 'Not enough password length'
                     ])
                 ]
             ])
             ->add('agree_terms', CheckboxType::class, [
-                'mapped' => false,
-                'label' => 'Я принимаю условия Пользовательского соглашения',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Необходимо принять пользовательское соглашение'
+                        'message' => 'Need agree terms'
                     ])
                 ]
             ])
@@ -57,7 +61,7 @@ class UserRegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => UserRegistrationFormModel::class,
         ]);
     }
 }

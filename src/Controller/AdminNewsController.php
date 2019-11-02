@@ -67,7 +67,9 @@ class AdminNewsController extends AbstractController
      */
     public function edit(News $news, Request $request, EntityManagerInterface $entityManager)
     {
-        $form = $this->createForm(NewsFormType::class, $news);
+        $form = $this->createForm(NewsFormType::class, $news, [
+            'include_published_at' => true
+        ]);
 
         $form->handleRequest($request);
 

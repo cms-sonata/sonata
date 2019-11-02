@@ -42,7 +42,7 @@ class UserSelectTextType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'invalid_message' => 'Пользоавтель не найден',
+            'invalid_message' => 'User not found',
             'finder_callback' => static function(UserRepository $userRepository, string $email) {
                 return $userRepository->findOneBy(['email' => $email]);
             },

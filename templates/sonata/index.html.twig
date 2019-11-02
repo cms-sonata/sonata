@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-        <h1>Sonata</h1>
+        {% trans_default_domain 'main' %}
+        <h1>{% trans %}Main page{% endtrans %}</h1>
         <hr>
-        <p class="lead">Фреймвор</p>
 {% endblock %}

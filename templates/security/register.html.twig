@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
-
+{% trans_default_domain 'main' %}
 {% form_theme registration_form _self %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{% trans %}Register{% endtrans %}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -46,13 +46,13 @@
         attr: {class: 'form-signin'}
     }) }}
 
-        <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{% trans %}Register{% endtrans %}</h1>
 
-        {{ form_row(registration_form.email, {attr: {placeholder: 'Email'}}) }}
-        {{ form_row(registration_form.plain_password, {attr: {placeholder: 'Пароль'}}) }}
-        {{ form_row(registration_form.agree_terms) }}
+        {{ form_row(registration_form.email, {attr: {placeholder: 'Email address'}}) }}
+        {{ form_row(registration_form.plain_password, {attr: {placeholder: 'Password'}}) }}
+        {{ form_row(registration_form.agree_terms, {label: 'Agree terms' | trans}) }}
 
-        <button class="btn btn-lg btn-dark btn-block" type="submit">Зарегистрироваться</button>
+        <button class="btn btn-lg btn-dark btn-block" type="submit">{% trans %}Sign up{% endtrans %}</button>
     {{ form_end(registration_form) }}
 
 {#    <form class="form-signin" method="post">#}

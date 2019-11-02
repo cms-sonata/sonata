@@ -1,13 +1,13 @@
+{% trans_default_domain 'news' %}
 {% extends 'admin_news/manage.html.twig' %}
 
-{% block title %}Hello AdminNewsController!{% endblock %}
+{% block title %}{% trans %}Manage news{% endtrans %}{% endblock %}
 
 {% block body %}
-
-        <h1>Изменение Новости </h1>
-
+        <h1>{% trans %}Edit news{% endtrans %}</h1>
+        <hr>
         {{ include('admin_news/_form.html.twig', {
-            button_text: 'Изменить'
+            button_text: 'Save' |trans({}, 'main')
         })}}
 
 {% endblock %}

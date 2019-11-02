@@ -54,6 +54,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+
+        if (!$credentials['email']) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Please enter email');
+        }
+
+        if (!$credentials['password']) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Please enter password');
+        }
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']

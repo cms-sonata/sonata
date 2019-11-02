@@ -1,20 +1,21 @@
+{% trans_default_domain 'news' %}
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminNewsController!{% endblock %}
+{% block title %}{% trans %}Manage news{% endtrans %}{% endblock %}
 
 {% block body %}
         <div class="table-responsive">
 
             <div class="">
-                <h1 class="d-inline-block align-middle">Новости ({{ pagination.getTotalItemCount }})</h1>
+                <h1 class="d-inline-block align-middle">{% trans %}News{% endtrans %} ({{ pagination.getTotalItemCount }})</h1>
                 <a href="{{ path('admin_news_create') }}" class="btn btn-secondary align-middle">
-                    Create <span class="fa fa-plus-circle"></span>
+                    {% trans from 'main' %}Create{% endtrans %} <span class="fa fa-plus-circle"></span>
                 </a>
             </div>
 
             <form>
                 <div class="input-group mb-3">
-                    <input type="text" name="q" class="form-control" placeholder="Search..."  value="{{ searchPhrase }}">
+                    <input type="text" name="q" class="form-control" placeholder="{% trans from 'main' %}Search{% endtrans %}..."  value="{{ searchPhrase }}">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-outline-secondary">
                             <i class="fa fa-search"></i>
@@ -26,9 +27,9 @@
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Текст новости</th>
-                    <th scope="col">Опубликовано</th>
+                    <th scope="col">{% trans %}Title{% endtrans %}</th>
+                    <th scope="col">{% trans %}News content{% endtrans %}</th>
+                    <th scope="col">{% trans %}Published{% endtrans %}</th>
                     <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
